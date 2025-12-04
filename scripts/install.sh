@@ -15,7 +15,7 @@ set -e # Exit immediately if a command exits with a non-zero status
 ## $1 could be empty, so we need to disable this check
 #set -u # Treat unset variables as an error and exit
 set -o pipefail # Cause a pipeline to return the status of the last command that exited with a non-zero status
-CDN="https://cdn.coollabs.io/coolify"
+CDN="https://raw.githubusercontent.com/oudayfatteh0/coolify-white-label/refs/heads/v4.x/"
 DATE=$(date +"%Y%m%d-%H%M%S")
 
 OS_TYPE=$(grep -w "ID" /etc/os-release | cut -d "=" -f 2 | tr -d '"')
@@ -29,9 +29,10 @@ if [ $EUID != 0 ]; then
     exit
 fi
 
-echo -e "Welcome to Coolify Installer!"
+echo -e "Welcome to OudayDev Installer!"
+echo -e "Based on Coolify Installer by CoolLabsIO"
 echo -e "This script will install everything for you. Sit back and relax."
-echo -e "Source code: https://github.com/coollabsio/coolify/blob/v4.x/scripts/install.sh"
+echo -e "Source code: https://github.com/oudayfatteh0/coolify-white-label/blob/v4.x/scripts/install.sh"
 
 # Predefined root user
 ROOT_USERNAME=${ROOT_USERNAME:-}
@@ -318,7 +319,7 @@ fi
 echo -e "---------------------------------------------"
 echo "| Operating System  | $OS_TYPE $OS_VERSION"
 echo "| Docker            | $DOCKER_VERSION"
-echo "| Coolify           | $LATEST_VERSION"
+echo "| OudayDev          | $LATEST_VERSION"
 echo "| Helper            | $LATEST_HELPER_VERSION"
 echo "| Realtime          | $LATEST_REALTIME_VERSION"
 echo "| Docker Pool       | $DOCKER_ADDRESS_POOL_BASE (size $DOCKER_ADDRESS_POOL_SIZE)"
@@ -420,7 +421,7 @@ if [ "$SSH_DETECTED" = "false" ]; then
     *)
         echo "###############################################################################"
         echo "WARNING: Could not detect and install OpenSSH server - this does not mean that it is not installed or not running, just that we could not detect it."
-        echo -e "Please make sure it is installed and running, otherwise Coolify cannot connect to the host system. \n"
+        echo -e "Please make sure it is installed and running, otherwise OudayDev cannot connect to the host system. \n"
         echo "###############################################################################"
         exit 1
         ;;
@@ -443,7 +444,7 @@ if [ -x "$(command -v snap)" ]; then
     SNAP_DOCKER_INSTALLED=$(snap list docker >/dev/null 2>&1 && echo "true" || echo "false")
     if [ "$SNAP_DOCKER_INSTALLED" = "true" ]; then
         echo "Docker is installed via snap."
-        echo "   Please note that Coolify does not support Docker installed via snap."
+        echo "   Please note that OudayDev does not support Docker installed via snap."
         echo "   Please remove Docker with snap (snap remove docker) and reexecute this script."
         exit 1
     fi
@@ -704,11 +705,11 @@ else
     fi
 fi
 
-echo -e "5. Download required files from CDN. "
+echo -e "5. Download required files from GitHub. "
 curl -fsSL -L $CDN/docker-compose.yml -o /data/coolify/source/docker-compose.yml
 curl -fsSL -L $CDN/docker-compose.prod.yml -o /data/coolify/source/docker-compose.prod.yml
 curl -fsSL -L $CDN/.env.production -o /data/coolify/source/.env.production
-curl -fsSL -L $CDN/upgrade.sh -o /data/coolify/source/upgrade.sh
+curl -fsSL -L $CDN/scripts/upgrade.sh -o /data/coolify/source/upgrade.sh
 
 echo -e "6. Setting up environment variable file"
 
@@ -803,9 +804,9 @@ if [ "$IS_COOLIFY_VOLUME_EXISTS" -eq 0 ]; then
     echo " - Generating SSH key."
     test -f /data/coolify/ssh/keys/id.$CURRENT_USER@host.docker.internal && rm -f /data/coolify/ssh/keys/id.$CURRENT_USER@host.docker.internal
     test -f /data/coolify/ssh/keys/id.$CURRENT_USER@host.docker.internal.pub && rm -f /data/coolify/ssh/keys/id.$CURRENT_USER@host.docker.internal.pub
-    ssh-keygen -t ed25519 -a 100 -f /data/coolify/ssh/keys/id.$CURRENT_USER@host.docker.internal -q -N "" -C coolify
+    ssh-keygen -t ed25519 -a 100 -f /data/coolify/ssh/keys/id.$CURRENT_USER@host.docker.internal -q -N "" -C oudaydev
     chown 9999 /data/coolify/ssh/keys/id.$CURRENT_USER@host.docker.internal
-    sed -i "/coolify/d" ~/.ssh/authorized_keys
+    sed -i "/oudaydev/d" ~/.ssh/authorized_keys
     cat /data/coolify/ssh/keys/id.$CURRENT_USER@host.docker.internal.pub >>~/.ssh/authorized_keys
     rm -f /data/coolify/ssh/keys/id.$CURRENT_USER@host.docker.internal.pub
 fi
@@ -813,7 +814,7 @@ fi
 chown -R 9999:root /data/coolify
 chmod -R 700 /data/coolify
 
-echo -e "9. Installing Coolify ($LATEST_VERSION)"
+echo -e "9. Installing OudayDev ($LATEST_VERSION)"
 echo -e " - It could take a while based on your server's performance, network speed, stars, etc."
 echo -e " - Please wait."
 getAJoke
@@ -823,19 +824,19 @@ if [[ $- == *x* ]]; then
 else
     bash /data/coolify/source/upgrade.sh "${LATEST_VERSION:-latest}" "${LATEST_HELPER_VERSION:-latest}" "${REGISTRY_URL:-ghcr.io}" "true"
 fi
-echo " - Coolify installed successfully."
+echo " - OudayDev installed successfully."
 
-echo " - Waiting 20 seconds for Coolify database migrations to complete."
+echo " - Waiting 20 seconds for OudayDev database migrations to complete."
 getAJoke
 
 sleep 20
 echo -e "\033[0;35m
-   ____                            _         _       _   _                 _
-  / ___|___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_(_) ___  _ __  ___| |
- | |   / _ \| '_ \ / _\` | '__/ _\` | __| | | | |/ _\` | __| |/ _ \| '_ \/ __| |
- | |__| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \__ \_|
-  \____\___/|_| |_|\__, |_|  \__,_|\__|\__,_|_|\__,_|\__|_|\___/|_| |_|___(_)
-                   |___/
+________            .___                  .___           
+\_____  \  __ __  __| _/____  ___.__.   __| _/_______  __
+ /   |   \|  |  \/ __ |\__  \<   |  |  / __ |/ __ \  \/ /
+/    |    \  |  / /_/ | / __ \\___  | / /_/ \  ___/\   / 
+\_______  /____/\____ |(____  / ____| \____ |\___  >\_/  
+        \/           \/     \/\/           \/    \/                           
 \033[0m"
 
 IPV4_PUBLIC_IP=$(curl -4s https://ifconfig.io || true)
@@ -843,10 +844,10 @@ IPV6_PUBLIC_IP=$(curl -6s https://ifconfig.io || true)
 
 echo -e "\nYour instance is ready to use!\n"
 if [ -n "$IPV4_PUBLIC_IP" ]; then
-    echo -e "You can access Coolify through your Public IPV4: http://$IPV4_PUBLIC_IP:8000"
+    echo -e "You can access OudayDev through your Public IPV4: http://$IPV4_PUBLIC_IP:8000"
 fi
 if [ -n "$IPV6_PUBLIC_IP" ]; then
-    echo -e "You can access Coolify through your Public IPv6: http://[$IPV6_PUBLIC_IP]:8000"
+    echo -e "You can access OudayDev through your Public IPv6: http://[$IPV6_PUBLIC_IP]:8000"
 fi
 
 set +e
