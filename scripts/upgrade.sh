@@ -1,7 +1,7 @@
 #!/bin/bash
 ## Do not modify this file. You will lose the ability to autoupdate!
 
-CDN="https://raw.githubusercontent.com/oudayfatteh0/coolify-white-label/v4.x"
+CDN="https://raw.githubusercontent.com/oudayfatteh0/coolify-white-label/refs/heads/v4.x/"
 LATEST_IMAGE=${1:-latest}
 LATEST_HELPER_VERSION=${2:-latest}
 REGISTRY_URL=${3:-ghcr.io}
