@@ -58,6 +58,9 @@ use App\Livewire\Server\Security\Patches;
 use App\Livewire\Server\Security\TerminalAccess;
 use App\Livewire\Server\Show as ServerShow;
 use App\Livewire\Settings\Advanced as SettingsAdvanced;
+use App\Livewire\Settings\Branding as SettingsBranding;
+use App\Livewire\Settings\BrandingPresets as SettingsBrandingPresets;
+use App\Livewire\Settings\EmailTemplates as SettingsEmailTemplates;
 use App\Livewire\Settings\Index as SettingsIndex;
 use App\Livewire\Settings\Updates as SettingsUpdates;
 use App\Livewire\SettingsBackup;
@@ -110,6 +113,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/subscription/new', SubscriptionIndex::class)->name('subscription.index');
 
     Route::get('/settings', SettingsIndex::class)->name('settings.index');
+    Route::get('/settings/branding', SettingsBranding::class)->name('settings.branding');
+    Route::get('/settings/branding-presets', SettingsBrandingPresets::class)->name('settings.branding-presets');
+    Route::get('/settings/email-templates', SettingsEmailTemplates::class)->name('settings.email-templates');
     Route::get('/settings/advanced', SettingsAdvanced::class)->name('settings.advanced');
     Route::get('/settings/updates', SettingsUpdates::class)->name('settings.updates');
 

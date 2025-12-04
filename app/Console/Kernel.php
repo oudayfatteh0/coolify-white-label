@@ -119,18 +119,21 @@ class Kernel extends ConsoleKernel
 
     private function scheduleUpdates(): void
     {
-        $this->scheduleInstance->job(new CheckForUpdatesJob)
-            ->cron($this->updateCheckFrequency)
-            ->timezone($this->instanceTimezone)
-            ->onOneServer();
+        // Update checks disabled for forked version to prevent overwriting custom modifications
+        // Uncomment below to re-enable update checks (not recommended for forked versions)
 
-        if ($this->settings->is_auto_update_enabled) {
-            $autoUpdateFrequency = $this->settings->auto_update_frequency;
-            $this->scheduleInstance->job(new UpdateCoolifyJob)
-                ->cron($autoUpdateFrequency)
-                ->timezone($this->instanceTimezone)
-                ->onOneServer();
-        }
+        // $this->scheduleInstance->job(new CheckForUpdatesJob)
+        //     ->cron($this->updateCheckFrequency)
+        //     ->timezone($this->instanceTimezone)
+        //     ->onOneServer();
+
+        // if ($this->settings->is_auto_update_enabled) {
+        //     $autoUpdateFrequency = $this->settings->auto_update_frequency;
+        //     $this->scheduleInstance->job(new UpdateCoolifyJob)
+        //         ->cron($autoUpdateFrequency)
+        //         ->timezone($this->instanceTimezone)
+        //         ->onOneServer();
+        // }
     }
 
     protected function commands(): void

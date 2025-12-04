@@ -29,6 +29,8 @@ class InstanceSettings extends Model
         'auto_update_frequency' => 'string',
         'update_check_frequency' => 'string',
         'sentinel_token' => 'encrypted',
+        'branding' => 'array',
+        'email_templates' => 'array',
     ];
 
     protected static function booted(): void
@@ -37,6 +39,14 @@ class InstanceSettings extends Model
             // Clear trusted hosts cache when FQDN changes
             if ($settings->wasChanged('fqdn')) {
                 \Cache::forget('instance_settings_fqdn_host');
+            }
+            // Clear branding cache when branding changes
+            if ($settings->wasChanged('branding')) {
+                \Cache::forget('instance_settings_branding');
+            }
+            // Clear email templates cache when email templates change
+            if ($settings->wasChanged('email_templates')) {
+                \Cache::forget('instance_settings_email_templates');
             }
         });
     }

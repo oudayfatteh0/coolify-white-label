@@ -16,22 +16,8 @@
     <meta name="robots" content="noindex">
     <meta name="theme-color" content="#ffffff" id="theme-color-meta" />
     <meta name="color-scheme" content="dark light" />
-    <meta name="Description" content="Coolify: An open-source & self-hostable Heroku / Netlify / Vercel alternative" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@coolifyio" />
-    <meta name="twitter:title" content="Coolify" />
-    <meta name="twitter:description" content="An open-source & self-hostable Heroku / Netlify / Vercel alternative." />
-    <meta name="twitter:image" content="https://cdn.coollabs.io/assets/coolify/og-image.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://coolify.io" />
-    <meta property="og:title" content="Coolify" />
-    <meta property="og:description" content="An open-source & self-hostable Heroku / Netlify / Vercel alternative." />
-    <meta property="og:site_name" content="Coolify" />
-    <meta property="og:image" content="https://cdn.coollabs.io/assets/coolify/og-image.png" />
-    @use('App\Models\InstanceSettings')
     @php
-
+        $branding = branding();
         $instanceSettings = instanceSettings();
         $name = null;
 
@@ -43,13 +29,36 @@
             }
         }
     @endphp
-    <title>{{ $name }}{{ $title ?? 'Coolify' }}</title>
-    @env('local')
-        <link rel="icon" href="{{ asset('coolify-logo-dev-transparent.png') }}" type="image/png" />
-    @else
-        <link rel="icon" href="{{ asset('coolify-logo.svg') }}" type="image/svg+xml" />
-    @endenv
+    <meta name="Description" content="{{ $branding->metaDescription() }}" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@coolifyio" />
+    <meta name="twitter:title" content="{{ $branding->productName() }}" />
+    <meta name="twitter:description" content="{{ $branding->metaDescription() }}" />
+    <meta name="twitter:image" content="{{ $branding->socialImageUrl() }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ $branding->marketingSiteUrl() }}" />
+    <meta property="og:title" content="{{ $branding->productName() }}" />
+    <meta property="og:description" content="{{ $branding->metaDescription() }}" />
+    <meta property="og:site_name" content="{{ $branding->productName() }}" />
+    <meta property="og:image" content="{{ $branding->socialImageUrl() }}" />
+    @php
+        $pageTitle = $branding->productName();
+        // If title is set and doesn't already include branding (no "|"), append it
+        if (isset($title) && $title && !str_contains($title, '|')) {
+            $pageTitle = $title . ' | ' . $branding->productName();
+        } elseif (isset($title) && $title) {
+            $pageTitle = $title;
+        }
+    @endphp
+    <title>{{ $name }}{{ $pageTitle }}</title>
+    <link rel="icon" href="{{ $branding->faviconUrl() }}" type="{{ $branding->faviconType() }}" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @if ($branding->googleFontUrl())
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="{{ $branding->googleFontUrl() }}" rel="stylesheet">
+    @endif
     @vite(['resources/js/app.js', 'resources/css/app.css'])
     <script>
         // Update theme-color meta tag (non-critical, can run async)
@@ -61,6 +70,51 @@
         [x-cloak] {
             display: none !important;
         }
+        :root {
+            --color-coollabs: {{ $branding->primaryColor() }};
+            --color-warning: {{ $branding->accentColor() }};
+            @if ($branding->fontFamily())
+                --font-sans-custom: {{ $branding->fontFamily() }};
+            @endif
+            @if ($branding->backgroundColor())
+                @php
+                    $bgColor = $branding->backgroundColor;
+                    if (!str_starts_with($bgColor, '#')) {
+                        // It's a color identifier - set both light and dark variants
+                        $lightColor = $branding->getThemeAdaptiveColor($bgColor, 'light');
+                        $darkColor = $branding->getThemeAdaptiveColor($bgColor, 'dark');
+                    } else {
+                        // Legacy hex color - use same for both
+                        $lightColor = $bgColor;
+                        $darkColor = $bgColor;
+                    }
+                @endphp
+                --color-background-light: {{ $lightColor }};
+                --color-background-dark: {{ $darkColor }};
+            @endif
+        }
+        @if ($branding->fontFamily())
+        html, body {
+            font-family: var(--font-sans-custom) !important;
+        }
+        @endif
+        @if ($branding->backgroundColor())
+        html, body {
+            background-color: var(--color-background-light) !important;
+        }
+        .dark html, .dark body {
+            background-color: var(--color-background-dark) !important;
+        }
+        /* Sidebar background - adapts to theme */
+        nav.sidebar-bg,
+        .sidebar-bg {
+            background-color: color-mix(in srgb, var(--color-background-light) 92%, white) !important;
+        }
+        .dark nav.sidebar-bg,
+        .dark .sidebar-bg {
+            background-color: color-mix(in srgb, var(--color-background-dark) 92%, white) !important;
+        }
+        @endif
     </style>
     @if (config('app.name') == 'Coolify Cloud')
         <script defer data-domain="app.coolify.io" src="https://analytics.coollabs.io/js/plausible.js"></script>

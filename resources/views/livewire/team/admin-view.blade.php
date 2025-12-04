@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        Team Admin | Coolify
+        Team Admin | {{ branding()->productName() }}
     </x-slot>
     <x-team.navbar />
     <h2>Admin View</h2>
@@ -21,9 +21,9 @@
                 <div class="flex-1"></div>
                 <div class="flex items-center justify-center gap-2 mx-4 text-xs font-bold ">
                     <x-modal-confirmation title="Confirm User Deletion?" buttonTitle="Delete" isErrorButton
-                        submitAction="delete({{ $user->id }})" :actions="[
-                            'The selected user will be permanently deleted from Coolify\'s database.',
-                            'All resources (application, databases, services, configurations, servers, private keys, tags, etc.) related to this user\'s default team will be deleted from Coolify\'s database.',
+                        submitAction="delete({{ $user->id }})"                         :actions="[
+                            'The selected user will be permanently deleted from {{ branding()->productName() }}\'s database.',
+                            'All resources (application, databases, services, configurations, servers, private keys, tags, etc.) related to this user\'s default team will be deleted from {{ branding()->productName() }}\'s database.',
                         ]"
                         confirmationText="{{ $user->name }}"
                         confirmationLabel="Please confirm the execution of the actions by entering the User Name below"

@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        Servers | Coolify
+        Servers | {{ branding()->productName() }}
     </x-slot>
     <div class="flex items-center gap-2">
         <h1>Servers</h1>

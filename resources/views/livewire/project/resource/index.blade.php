@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($project, 'name')->limit(10) }} > Resources | Coolify
+        {{ data_get_str($project, 'name')->limit(10) }} > Resources | {{ branding()->productName() }}
     </x-slot>
     <div class="flex flex-col">
         <div class="flex items-center gap-2">

@@ -14,7 +14,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-sans: Inter, sans-serif;
+    --font-sans: var(--font-sans-custom, Inter, sans-serif);
 
     --color-base: #101010;
     --color-warning: #fcd452;

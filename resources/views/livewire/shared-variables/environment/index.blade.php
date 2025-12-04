@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        Environment Variables | Coolify
+        Environment Variables | {{ branding()->productName() }}
     </x-slot>
     <div class="flex gap-2">
         <h1>Environments</h1>

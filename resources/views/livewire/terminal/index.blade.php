@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        Terminal | Coolify
+        Terminal | {{ branding()->productName() }}
         </x-slot>
         <h1>Terminal</h1>
         <div class="flex gap-2 items-end subtitle">

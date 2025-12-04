@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        Environment Variable | Coolify
+        Environment Variable | {{ branding()->productName() }}
     </x-slot>
     <div class="flex gap-2">
         <h1>Shared Variables for {{ $project->name }}/{{ $environment->name }}</h1>

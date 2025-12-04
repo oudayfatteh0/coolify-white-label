@@ -1,4 +1,4 @@
-<nav class="flex flex-col flex-1 px-2 bg-white border-r dark:border-coolgray-200 border-neutral-300 dark:bg-base"
+<nav class="flex flex-col flex-1 px-2 bg-white border-r dark:border-coolgray-200 border-neutral-300 dark:bg-base sidebar-bg"
     x-data="{
         switchWidth() {
                 if (this.full === 'full') {
@@ -79,7 +79,19 @@
     }">
     <div class="flex lg:pt-6 pt-4 pb-4 pl-2">
         <div class="flex flex-col w-full">
-            <a href="/" class="text-2xl font-bold tracking-wide dark:text-white hover:opacity-80 transition-opacity">Coolify</a>
+            <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                @php
+                    $branding = branding();
+                @endphp
+                @if ($branding->useLogoInNavbar())
+                    <img src="{{ $branding->darkLogoUrl() }}" alt="{{ $branding->productShortName() }}" 
+                        class="h-7 w-auto max-w-[200px] object-contain dark:hidden" style="aspect-ratio: 4/1; height: 1.75rem; max-height: 1.75rem;" />
+                    <img src="{{ $branding->lightLogoUrl() }}" alt="{{ $branding->productShortName() }}" 
+                        class="hidden h-7 w-auto max-w-[200px] object-contain dark:block" style="aspect-ratio: 4/1; height: 1.75rem; max-height: 1.75rem;" />
+                @else
+                    <span class="text-2xl font-bold tracking-wide dark:text-white">{{ $branding->productShortName() }}</span>
+                @endif
+            </a>
             <x-version />
         </div>
         <div>
@@ -339,13 +351,14 @@
                         @endif
                     @endif
                     <div class="flex-1"></div>
-                    @if (isInstanceAdmin() && !isCloud())
+                    {{-- Upgrade button disabled for forked version --}}
+                    {{-- @if (isInstanceAdmin() && !isCloud())
                         @persist('upgrade')
                             <li>
                                 <livewire:upgrade />
                             </li>
                         @endpersist
-                    @endif
+                    @endif --}}
                     {{-- <li>
                         <a title="Onboarding"
                             class="{{ request()->is('onboarding*') ? 'menu-item-active menu-item' : 'menu-item' }}"

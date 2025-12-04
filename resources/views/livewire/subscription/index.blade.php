@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        Subscribe | Coolify
+        Subscribe | {{ branding()->productName() }}
     </x-slot>
     @if (auth()->user()->isAdminFromSession())
         @if (request()->query->get('cancelled'))

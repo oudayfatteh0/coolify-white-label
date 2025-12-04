@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($server, 'name')->limit(10) }} > Server Resources | Coolify
+        {{ data_get_str($server, 'name')->limit(10) }} > Server Resources | {{ branding()->productName() }}
     </x-slot>
     <livewire:server.navbar :server="$server" />
     <div x-data="{ activeTab: 'managed' }" class="flex flex-col h-full gap-8 md:flex-row">

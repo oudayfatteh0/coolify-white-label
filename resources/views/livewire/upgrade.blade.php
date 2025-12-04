@@ -1,5 +1,5 @@
 <div @if ($isUpgradeAvailable) title="New version available" @else title="No upgrade available" @endif
-    x-init="$wire.checkUpdate" x-data="upgradeModal">
+    x-init="$wire.checkUpdate" x-data="upgradeModal" data-product-name="{{ branding()->productName() }}">
     @if ($isUpgradeAvailable)
         <div :class="{ 'z-40': modalOpen }" class="relative w-auto h-auto">
             <button class="menu-item" @click="modalOpen=true" x-show="showProgress">
@@ -107,10 +107,11 @@
                 });
             },
             getReviveStatusMessage(elapsedMinutes, attempts) {
+                const productName = this.$el.getAttribute('data-product-name') || 'Coolify';
                 if (elapsedMinutes === 0) {
-                    return `Waiting for Coolify to come back online... (attempt ${attempts})`;
+                    return `Waiting for ${productName} to come back online... (attempt ${attempts})`;
                 } else if (elapsedMinutes < 2) {
-                    return `Waiting for Coolify to come back online... (${elapsedMinutes} minute${elapsedMinutes !== 1 ? 's' : ''} elapsed)`;
+                    return `Waiting for ${productName} to come back online... (${elapsedMinutes} minute${elapsedMinutes !== 1 ? 's' : ''} elapsed)`;
                 } else if (elapsedMinutes < 5) {
                     return `Update in progress, this may take several minutes... (${elapsedMinutes} minutes elapsed)`;
                 } else if (elapsedMinutes < 10) {
@@ -130,8 +131,9 @@
                     fetch('/api/health')
                         .then(response => {
                             if (response.ok) {
+                                const productName = this.$el.getAttribute('data-product-name') || 'Coolify';
                                 this.currentStatus =
-                                    'Coolify is back online. Reloading this page in 5 seconds...';
+                                    `${productName} is back online. Reloading this page in 5 seconds...`;
                                 if (this.checkHealthInterval) {
                                     clearInterval(this.checkHealthInterval);
                                     this.checkHealthInterval = null;
@@ -153,15 +155,16 @@
             },
             upgrade() {
                 if (this.checkIfIamDeadInterval || this.showProgress) return true;
-                this.currentStatus = 'Update in progress. Pulling new images and preparing to restart Coolify...';
+                const productName = this.$el.getAttribute('data-product-name') || 'Coolify';
+                this.currentStatus = `Update in progress. Pulling new images and preparing to restart ${productName}...`;
                 this.checkIfIamDeadInterval = setInterval(() => {
                     fetch('/api/health')
                         .then(response => {
                             if (response.ok) {
                                 this.currentStatus =
-                                    "Update in progress. Pulling new images and preparing to restart Coolify..."
+                                    `Update in progress. Pulling new images and preparing to restart ${productName}...`
                             } else {
-                                this.currentStatus = "Coolify is restarting with the new version..."
+                                this.currentStatus = `${productName} is restarting with the new version...`
                                 if (this.checkIfIamDeadInterval) {
                                     clearInterval(this.checkIfIamDeadInterval);
                                     this.checkIfIamDeadInterval = null;
@@ -171,7 +174,8 @@
                         })
                         .catch(error => {
                             console.error('Health check failed:', error);
-                            this.currentStatus = "Coolify is restarting with the new version..."
+                            const productName = this.$el.getAttribute('data-product-name') || 'Coolify';
+                            this.currentStatus = `${productName} is restarting with the new version...`
                             if (this.checkIfIamDeadInterval) {
                                 clearInterval(this.checkIfIamDeadInterval);
                                 this.checkIfIamDeadInterval = null;

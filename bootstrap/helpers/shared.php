@@ -2897,6 +2897,16 @@ function instanceSettings()
     return InstanceSettings::get();
 }
 
+function branding(): \App\Support\BrandingOptions
+{
+    return \Cache::remember('instance_settings_branding', now()->addHours(24), function () {
+        $settings = instanceSettings();
+        $branding = $settings->branding ?? null;
+
+        return \App\Support\BrandingOptions::fromArray($branding);
+    });
+}
+
 function getHelperVersion(): string
 {
     $settings = instanceSettings();

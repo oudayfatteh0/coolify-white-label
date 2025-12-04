@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>
-        Sources | Coolify
+        Sources | {{ branding()->productName() }}
     </x-slot>
     <div class="flex items-center gap-2">
         <h1>Sources</h1>

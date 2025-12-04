@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        Shared Variables | Coolify
+        Shared Variables | {{ branding()->productName() }}
     </x-slot>
     <div class="flex items-start gap-2">
         <h1>Shared Variables</h1>

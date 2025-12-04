@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        Auto Update | Coolify
+        Auto Update | {{ branding()->productName() }}
     </x-slot>
     <x-settings.navbar />
     <div x-data="{ activeTab: window.location.hash ? window.location.hash.substring(1) : 'general' }" class="flex flex-col h-full gap-8 sm:flex-row">

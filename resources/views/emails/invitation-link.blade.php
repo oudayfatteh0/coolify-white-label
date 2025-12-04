@@ -1,5 +1,5 @@
 <x-emails.layout>
-You have been invited to "{{ $team }}" on "{{ config('app.name') }}".
+You have been invited to "{{ $team }}" on "{{ branding()->productName() }}".
 
 Please [click here]({{ $invitation_link }}) to accept the invitation.
 

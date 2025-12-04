@@ -3,9 +3,21 @@
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div class="w-full max-w-md space-y-8">
                 <div class="text-center space-y-2">
-                    <h1 class="!text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-                        Coolify
-                    </h1>
+                    @php
+                        $branding = branding();
+                    @endphp
+                    @if ($branding->useLogoInNavbar())
+                        <div class="flex justify-center">
+                            <img src="{{ $branding->darkLogoUrl() }}" alt="{{ $branding->productName() }}" 
+                                class="h-12 w-auto max-w-xs object-contain dark:hidden" style="aspect-ratio: 4/1; height: 3rem; max-height: 3rem;" />
+                            <img src="{{ $branding->lightLogoUrl() }}" alt="{{ $branding->productName() }}" 
+                                class="hidden h-12 w-auto max-w-xs object-contain dark:block" style="aspect-ratio: 4/1; height: 3rem; max-height: 3rem;" />
+                        </div>
+                    @else
+                        <h1 class="!text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                            {{ $branding->productName() }}
+                        </h1>
+                    @endif
                 </div>
 
                 <div class="space-y-6">

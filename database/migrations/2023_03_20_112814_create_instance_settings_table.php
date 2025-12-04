@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('public_port_min')->default(9000);
             $table->integer('public_port_max')->default(9100);
             $table->boolean('do_not_track')->default(false);
-            $table->boolean('is_auto_update_enabled')->default(true);
+            $table->boolean('is_auto_update_enabled')->default(false);
             $table->boolean('is_registration_enabled')->default(true);
             $table->schemalessAttributes('smtp');
             $table->timestamps();
